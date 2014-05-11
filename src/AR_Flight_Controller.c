@@ -78,9 +78,9 @@ int main(int argc, char *argv[])
     }
     
     // Création de la fennêtre !
-    SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE);
-    SDL_WM_SetCaption("AR Flight Controller !", NULL);
-    SDL_JoystickEventState(SDL_ENABLE);
+    // SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE);
+    // SDL_WM_SetCaption("AR Flight Controller !", NULL);
+    // SDL_JoystickEventState(SDL_ENABLE);
     
     Manette manette; // Structure qui permet de gérer les boutons et les axes de la manette
     
