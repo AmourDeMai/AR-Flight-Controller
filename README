@@ -1,1 +1,51 @@
-AR_Flight_Controller
+# AR Flight Controller
+
+ATTENTION : Ce programme est expérimental : Nous ne pouvons garantir son fonctionnement optimal. Utilisez le en toute connaissance de cause ! En aucun cas nous ne pourrons être tenus pour responsable des dommages directs ou indirects causés par l’utilisation d’AR Flight Controller. N’hésitez pas à nous contacter si vous avez des doutes sur l’utilisation de ce programme !
+
+## Fonctionnalités
+
+Voici la liste des fonctionnalités offertes par AR Flight Controller :
+
+	Bouton R1 : Décollage
+	Bouton L1 : Atterrissage
+	Bouton « Playstation » + Flèche haut : Looping vers l’avant
+	Bouton « Playstation » + Flèche bas : Looping vers l’arrière
+	Bouton « Playstation » + Flèche gauche : Looping vers la gauche
+	Bouton « Playstation » + Flèche droite : Looping vers la droite
+	Bouton « Triangle » + « Croix » : Activation du mode d’urgence
+	Bouton « Rond » + « Carré » : Désactivation du mode d’urgence
+	Bouton « Start » : Quitter le programme. Le drone atterri automatiquement s’il est en vol lorsque vous quittez le programme.
+	Bouton « Select » : Basculer entre le mode de vol « Normal » et le mode « Autonome ». Le mode autonome permet de suivre automatiquement une cible prédéfinie.			Bouton R3 : Activation du mode « Nervosité » (Voir plus loin !)
+	Bouton L3 : Activation du mode « Sécurité »
+
+### Comment utiliser le mode « Nervosité » ?!
+
+AR Flight Controller offre deux modes vol : le mode « Sécurité » qui est similaire à l’expérience qu’offre l’application officielle (AR.FreeFlight) et le mode « Nervosité » qui permet d’exploiter sans concessions le potentiel de l’AR Drone. Le mode « Nervosité » offre une vitesse verticale maximale plus importante – l’angle de flexion maximal est plus important (ce qui signifie que la vitesse de déplacement du drone est bien plus grande) –  la vitesse de lacet du drone est plus grande (ce qui signifie que la vitesse de rotation du drone est bien plus grande). Vous pouvez personnaliser ces paramètres en modifiant le code source du programme (voir plus loin).
+
+Comme son nom l’indique le mode « Nervosité » est … Nerveux ! Utilisez le de préférence dans un lieu à découvert. Loin de tout obstacle. En effet l’accélération du drone est importante en mode « Nervosité ». Une collision avec un arbre est vite arrivée ! Veillez à garder une altitude de vol suffisante lorsque le mode « Nervosité » est activé : l’angle de flexion maximal important provoque une « légère » perte d’altitude du drone lorsque celui-ci est lancé à pleine vitesse. C’est pourquoi nous avons préféré augmenter l’altitude de vol minimal du drone dans ce mode de vol.
+
+Appuyez simplement sur la touche R3 de la manette pour activer le mode « Nervosité ». Nous avons configuré ce programme de telle sorte que le drone décolle toujours en mode « Sécurité ». Vous ne pouvez donc activer le mode « Nervosité » que lorsque le drone est en vol. Appuyez ensuite sur la touche R1 si vous souhaitez basculer à nouveau dans le mode « Sécurité ». Nous expliquons dans la suite de cet article comment modifier les différents paramètres des modes « Sécurité » et « Nervosité ».
+
+ATTENTION : Le mode « Nervosité » est réservé aux utilisateurs confirmés ! L’AR Drone est rapide ! Ne le perdez pas de vue !
+
+Anecdote : Nous avons perdu de vue un AR Drone 2.0 alors qu’il y avait un peu de vent. Nous ne l’avons jamais revu ! À ce propos nous avons constaté que le mode « Nervosité » permet de combattre plus efficacement le vent lorsque le drone est en perdition. Toutefois si nous devions vous donner un bon conseil : ne volez pas en extérieur lorsqu’il y a du vent ! L’AR Drone est trop léger pour combattre le vent !
+
+### Et les « loopings »
+
+AR Flight Controller permet d’effecter quatre types de loopings : vers l’avant – vers l’arrière – vers la gauche – vers la droite. Vous pouvez choisir le type de looping à réaliser avec le bouton « Playstation » et le stick directionnel de la manette (voir plus haut). Attention ! La réalisation d’un looping est particulièrement gourmande en énergie. Vous pouvez essayer de réaliser des loopings pendant que le drone est en mouvement ! Effet garanti ! À condition de ne pas se trouver trop près des arbres environnants. Attention ! Le drone gagne de l’altitude lorsqu’il réalise un looping. Prévoyez de la place !
+
+### Suivre une cible !
+
+AR Flight Controller permet également de suivre une cible prédéfinie. Pour cela vous devez basculer le drone en mode de vol « autonome » à l’aide de la touche « Select » de la manette. Cette fonctionnalité est encore expérimentale. Nous vous fournirons bientôt plus d’explications ! Toutefois nos premiers tests ont été concluants.
+
+### Que se passe t-il en cas de déconnexion de la manette ?!
+
+Pas de problèmes ! Le drone atterri automatiquement lorsque la manette est déconnectée pendant l’exécution du programme. Vous pouvez rencontrer ce problème si votre manette n’a plus de batterie ou que vous vous éloignez trop de votre ordinateur.
+
+Anecdote : les premières versions de notre programme ne géraient pas la déconnexion de la manette … L’AR Drone fonçait dans une direction aléatoire dès que la manette était déconnectée ! Nous avons évidemment corrigé ce problème qui venait d’une mauvaise gestion des informations véhiculées par la SDL.
+
+### Que se passe t-il si la connexion WiFi est interrompue ?!
+
+L’AR Drone bascule en vol stationnaire si la la connexion WiFi est interrompue. Le programme affiche alors ce message d’erreur : « Error : Network is unreachable ! ». Si vous rencontrez ce problème vous devrez vous reconnecter au réseau WiFi du drone afin d’en reprendre le contrôle. Nous allons améliorer ce programme afin que la la manette vibre s’il y a un problème de connexion au réseau. Notez que le drone atterri automatiquement lorsque sa batterie devient faible.
+
+Pendant nos tests en terrain dégagé nous avons constaté une excellente portée tant pour le WiFi (connexion avec le drone) que pour le  Bluetooth (connexion avec la manette). Nous avons utilisé lors de ces tests deux MacBook Pro Retina 13′ (fin 2013).
