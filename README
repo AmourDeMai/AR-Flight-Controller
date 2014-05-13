@@ -6,17 +6,17 @@ ATTENTION : Ce programme est expérimental : Nous ne pouvons garantir son foncti
 
 Voici la liste des fonctionnalités offertes par AR Flight Controller :
 
-	Bouton R1 : Décollage
-	Bouton L1 : Atterrissage
-	Bouton « Playstation » + Flèche haut : Looping vers l’avant
-	Bouton « Playstation » + Flèche bas : Looping vers l’arrière
-	Bouton « Playstation » + Flèche gauche : Looping vers la gauche
-	Bouton « Playstation » + Flèche droite : Looping vers la droite
-	Bouton « Triangle » + « Croix » : Activation du mode d’urgence
-	Bouton « Rond » + « Carré » : Désactivation du mode d’urgence
-	Bouton « Start » : Quitter le programme. Le drone atterri automatiquement s’il est en vol lorsque vous quittez le programme.
-	Bouton « Select » : Basculer entre le mode de vol « Normal » et le mode « Autonome ». Le mode autonome permet de suivre automatiquement une cible prédéfinie.			Bouton R3 : Activation du mode « Nervosité » (Voir plus loin !)
-	Bouton L3 : Activation du mode « Sécurité »
+Bouton R1 : Décollage
+Bouton L1 : Atterrissage
+Bouton « Playstation » + Flèche haut : Looping vers l’avant
+Bouton « Playstation » + Flèche bas : Looping vers l’arrière
+Bouton « Playstation » + Flèche gauche : Looping vers la gauche
+Bouton « Playstation » + Flèche droite : Looping vers la droite
+Bouton « Triangle » + « Croix » : Activation du mode d’urgence
+Bouton « Rond » + « Carré » : Désactivation du mode d’urgence
+Bouton « Start » : Quitter le programme. Le drone atterri automatiquement s’il est en vol lorsque vous quittez le programme.
+Bouton « Select » : Basculer entre le mode de vol « Normal » et le mode « Autonome ». Le mode autonome permet de suivre automatiquement une cible prédéfinie.			Bouton R3 : Activation du mode « Nervosité » (Voir plus loin !)
+Bouton L3 : Activation du mode « Sécurité »
 
 ### Comment utiliser le mode « Nervosité » ?!
 
