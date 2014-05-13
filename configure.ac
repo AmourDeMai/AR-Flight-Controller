@@ -1,4 +1,4 @@
-AC_PREREQ([2.69])
+AC_PREREQ([2.68])
 AC_INIT(AR_Flight_Controller, 1.0, pp.pele.pierre@gmail.com)
 AC_CANONICAL_TARGET
 AC_CONFIG_SRCDIR([src/AR_Flight_Controller.c])
