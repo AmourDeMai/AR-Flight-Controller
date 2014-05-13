@@ -563,7 +563,7 @@ PACKAGE_TARNAME='ar_flight_controller'
 PACKAGE_VERSION='1.0'
 PACKAGE_STRING='AR_Flight_Controller 1.0'
 PACKAGE_BUGREPORT='pp.pele.pierre@gmail.com'
-PACKAGE_URL=''
+PACKAGE_URL='http://upsilonaudio.com'
 
 ac_unique_file="src/AR_Flight_Controller.c"
 # Factoring default headers for most tests.
@@ -1365,6 +1365,7 @@ Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <pp.pele.pierre@gmail.com>.
+AR_Flight_Controller home page: <http://upsilonaudio.com>.
 _ACEOF
 ac_status=$?
 fi
@@ -5157,7 +5158,8 @@ $config_files
 Configuration commands:
 $config_commands
 
-Report bugs to <pp.pele.pierre@gmail.com>."
+Report bugs to <pp.pele.pierre@gmail.com>.
+AR_Flight_Controller home page: <http://upsilonaudio.com>."
 
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
