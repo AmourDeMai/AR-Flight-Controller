@@ -33,7 +33,6 @@
 struct params
 {
     gboolean debug;
-    gboolean keepPolling;
     gchar* adapterObjectPath;
     GMainLoop* pMainLoop;
     gint returnCode;
@@ -312,13 +311,6 @@ static void tag_device_lost(const char *name, void *pUserData)
 {
     params_t* pParams = (params_t*) pUserData;
     
-    //Exit program
-    if(!pParams->keepPolling)
-    {
-        g_main_loop_quit(pParams->pMainLoop);
-        return;
-    }
-    
     //Go through adapters and restart polling
     pParams->returnCode = start_polling(pParams);
     if(pParams->returnCode != 0)
@@ -327,11 +319,10 @@ static void tag_device_lost(const char *name, void *pUserData)
     }
 }
 
-int main(int argc, char** argv)
-{
+int nfc_main(int argc, char** argv) {
+    
     params_t params;
     params.debug = FALSE;
-    params.keepPolling = FALSE;
     params.adapterObjectPath = NULL;
     params.returnCode = 0;
     
@@ -339,7 +330,6 @@ int main(int argc, char** argv)
     const GOptionEntry entries[] =
     {
         { "debug", 'd', 0, G_OPTION_ARG_NONE, &params.debug, "Enable debugging mode", NULL },
-        { "keep-polling", 'k', 0, G_OPTION_ARG_NONE, &params.keepPolling, "Keep polling", NULL },
         { "adapter", 'a', 0, G_OPTION_ARG_STRING, &params.adapterObjectPath, "Use a specific adapter", NULL},
         { NULL }
     };
@@ -393,8 +383,7 @@ int main(int argc, char** argv)
     //Will run till signal or record found
     g_main_loop_run(params.pMainLoop);
     
-    if( params.adapterObjectPath != NULL )
-    {
+    if( params.adapterObjectPath != NULL ) {
         g_free(params.adapterObjectPath);
     }
     
