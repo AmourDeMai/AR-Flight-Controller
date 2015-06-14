@@ -28,14 +28,18 @@
 #include <glib/gprintf.h>
 #include <string.h>
 
+#include "nfc_supprot.h"
 #include "neardal.h"
 
-struct params
-{
+struct params {
+    
     gboolean debug;
     gchar* adapterObjectPath;
+    gchar* uid_land;
+    gchar* uid_takeoff;
     GMainLoop* pMainLoop;
     gint returnCode;
+    
 };
 typedef struct params params_t;
 
@@ -212,7 +216,7 @@ static gchar* bytes_to_str(GBytes* bytes)
     return str;
 }
 
-static void dump_tag(neardal_tag* pTag)
+static void handle_tag(neardal_tag* pTag)
 {
     if( pTag->iso14443aAtqa != NULL )
     {
@@ -232,6 +236,9 @@ static void dump_tag(neardal_tag* pTag)
     {
         gchar *str = bytes_to_str(pTag->iso14443aUid);
         g_printf("ISO14443A UID: \t%s\r\n", str);
+        
+        // TODO
+        
         g_free(str);
     }
     
@@ -298,7 +305,7 @@ static void tag_found(const char *tagName, void *pUserData)
     }
     
     //Dump record's content
-    dump_tag(pTag);
+    handle_tag(pTag);
     neardal_free_tag(pTag);
 }
 
@@ -319,17 +326,22 @@ static void tag_device_lost(const char *name, void *pUserData)
     }
 }
 
-int nfc_main(int argc, char** argv) {
+static int nfc_main(int argc,
+                    char** argv) {
     
     params_t params;
     params.debug = FALSE;
     params.adapterObjectPath = NULL;
     params.returnCode = 0;
+    params.uid_land = NULL;
+    params.uid_takeoff = NULL;
     
     //Parse options
     const GOptionEntry entries[] =
     {
         { "debug", 'd', 0, G_OPTION_ARG_NONE, &params.debug, "Enable debugging mode", NULL },
+        { "uid-take-off", 't', 0, G_OPTION_ARG_STRING, &params.uid_takeoff, "UID for take off.", NULL},
+        { "uid-land", 'l', 0, G_OPTION_ARG_STRING, &params.uid_land, "UID for land", NULL},
         { "adapter", 'a', 0, G_OPTION_ARG_STRING, &params.adapterObjectPath, "Use a specific adapter", NULL},
         { NULL }
     };
@@ -388,4 +400,17 @@ int nfc_main(int argc, char** argv) {
     }
     
     return params.returnCode;
+}
+
+void *nfc_thread_func(void *data) {
+    
+    if (!data) {
+     cli_params *params = (cli_params) data;
+    } else {
+        return NULL;
+    }
+    
+    int status_code = nfc_main(params->argc, params->argv);
+    
+    return NULL;
 }

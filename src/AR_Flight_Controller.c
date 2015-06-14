@@ -126,6 +126,11 @@ int main(int argc, char *argv[]) {
     int flying_mode = 0; // flying_mode = 0 : Mode normal - flying_mode = 1 "hover over oriented roundel mode"
     unsigned int compteur = 0; // Initialisation du compteur
     
+#if defined(HAVE_NFC_ENABLE) && HAVE_NFC_ENABLE == 1
+    cli_params params = { argc, argv };
+    GThread *nfc_thread = g_thread_new("NFC Thread", &nfc_thread_func, &params);
+#endif
+    
     while (boucle) {
         
         if (actualiser_Etat_Manette(&manette) == 0) // Actualisaton de l'état de la manette
