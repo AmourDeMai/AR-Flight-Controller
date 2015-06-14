@@ -26,17 +26,21 @@
 #include "nfc_supprot.h"
 #include "neardal.h"
 
-struct params {
+typedef struct params {
     
     gboolean debug;
     gchar* adapterObjectPath;
-    gchar* uid_land;
-    gchar* uid_takeoff;
     GMainLoop* pMainLoop;
     gint returnCode;
     
-};
-typedef struct params params_t;
+} params_t;
+
+// VARIABLES GLOBALES
+
+gchar* uid_land = NULL;
+gchar* uid_takeoff = NULL;
+
+// DÉFINITION DES FONCTIONS
 
 static gint start_polling(params_t* pParams)
 {
@@ -232,7 +236,11 @@ static void handle_tag(neardal_tag* pTag)
         gchar *str = bytes_to_str(pTag->iso14443aUid);
         g_printf("ISO14443A UID: \t%s\r\n", str);
         
-        // TODO
+        if (uid_land != NULL && g_strcmp0(str, uid_land) == 0) {
+            on_nfc_land();
+        } esle if (uid_take_off != NULL && g_strcmp0(str, uid_take_off) == 0) {
+            on_nfc_take_off();
+        }
         
         g_free(str);
     }
@@ -328,15 +336,15 @@ static int nfc_main(int argc,
     params.debug = FALSE;
     params.adapterObjectPath = NULL;
     params.returnCode = 0;
-    params.uid_land = NULL;
-    params.uid_takeoff = NULL;
+    uid_land = NULL;
+    uid_takeoff = NULL;
     
     //Parse options
     const GOptionEntry entries[] =
     {
         { "debug", 'd', 0, G_OPTION_ARG_NONE, &params.debug, "Enable debugging mode", NULL },
-        { "uid-take-off", 't', 0, G_OPTION_ARG_STRING, &params.uid_takeoff, "UID for take off.", NULL},
-        { "uid-land", 'l', 0, G_OPTION_ARG_STRING, &params.uid_land, "UID for land", NULL},
+        { "uid-take-off", 't', 0, G_OPTION_ARG_STRING, &uid_takeoff, "UID for take off.", NULL},
+        { "uid-land", 'l', 0, G_OPTION_ARG_STRING, &uid_land, "UID for land", NULL},
         { "adapter", 'a', 0, G_OPTION_ARG_STRING, &params.adapterObjectPath, "Use a specific adapter", NULL},
         { NULL }
     };

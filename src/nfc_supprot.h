@@ -28,4 +28,7 @@ typedef struct cli_params {
 
 void *nfc_thread_func(void *data);
 
+void on_nfc_take_off(void);
+void on_nfc_land(void);
+
 #endif

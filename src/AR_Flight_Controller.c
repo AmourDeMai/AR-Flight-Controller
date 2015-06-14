@@ -88,6 +88,19 @@ int sockfd, slen;
 
 // FONCTION PRINCIPALE
 
+#if defined(HAVE_NFC_ENABLE) && HAVE_NFC_ENABLE == 1
+void on_nfc_take_off(void) {
+    
+    printf("DÉCOLLAGE !\n\n\n\n\n\n");
+}
+
+void on_nfc_land(void) {
+    
+    printf("ATTERISSAGE !\n\n\n\n\n\n");
+}
+
+#endif
+
 int main(int argc, char *argv[]) {
     
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
