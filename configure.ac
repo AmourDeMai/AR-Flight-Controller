@@ -5,7 +5,6 @@ AC_PREREQ([2.68])
 AC_INIT(AR_Flight_Controller, 1.1, pp.pele.pierre@gmail.com, AR_Flight_Controller, http://upsilonaudio.com)
 AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS([AR_Flight_Controller_config.h])
-AC_SUBST(target)
 
 # Checks for programs.
 AC_PROG_CC

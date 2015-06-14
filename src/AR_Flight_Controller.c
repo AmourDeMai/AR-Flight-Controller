@@ -29,6 +29,14 @@
 #include <string.h>
 #include "Gestion_Manette.h"
 
+#ifdef HAVE_CONFIG_H
+#include "../AR_Flight_Controller_config.h"
+#endif
+
+#if defined(HAVE_NFC_ENABLE) && HAVE_NFC_ENABLE == 1
+#include "nfc_supprot.h"
+#endif
+
 // DEFINES
 
 // ADRESSE IP AR.DRONE
@@ -333,7 +341,7 @@ int envoyer_AT_PCMD(unsigned int *compteur,
         
         return 0; // On sort de la fonction
         
-    } else if( (abs(my_floating_point_variable_4) < PS3_AXES_SEUIL_DETECTION) &&
+    } else if((abs(my_floating_point_variable_4) < PS3_AXES_SEUIL_DETECTION) &&
               (abs(my_floating_point_variable_3) < PS3_AXES_SEUIL_DETECTION) &&
               (abs(my_floating_point_variable_2) < PS3_AXES_SEUIL_DETECTION) &&
               (abs(my_floating_point_variable_1) < PS3_AXES_SEUIL_DETECTION)) {

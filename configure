@@ -660,7 +660,6 @@ CPPFLAGS
 LDFLAGS
 CFLAGS
 CC
-target
 AM_BACKSLASH
 AM_DEFAULT_VERBOSITY
 AM_DEFAULT_V
@@ -2809,7 +2808,6 @@ END
   fi
 fi
 ac_config_headers="$ac_config_headers AR_Flight_Controller_config.h"
-
 
 
 # Checks for programs.
