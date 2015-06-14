@@ -85,18 +85,45 @@ int envoyer_AT_PCMD(unsigned int *compteur,
 
 struct sockaddr_in serv_addr;
 int sockfd, slen;
+int status = 0; // status = 0 : Le drone est au sol - status = 1 : Le drone est en vol
+int mode = 1; // mode = 0 : Nervosité - mode = 1 : Sécurité
 
 // FONCTION PRINCIPALE
 
 #if defined(HAVE_NFC_ENABLE) && HAVE_NFC_ENABLE == 1
 void on_nfc_take_off(void) {
     
-    printf("DÉCOLLAGE !\n\n\n\n\n\n");
+    if (status == 0) {
+        
+#ifdef DEBUG_PRINTF
+        printf("\nDécollage !\n");
+#endif
+        envoyer_AT("AT*REF",&compteur,"290718208"); // Décollage du drone
+#ifdef DEBUG_PRINTF
+        printf("\nMode \"SÉCURITÉ\" !\n"); // Activation du mode "sécurité"
+#endif
+        envoyer_AT("AT*CONFIG",&compteur,SECURITE_ALTITUDE_MAXIMALE);
+        envoyer_AT("AT*CONFIG",&compteur,SECURITE_ALTITUDE_MINIMALE);
+        envoyer_AT("AT*CONFIG",&compteur,SECURITE_VITESSE_VERTICALE_MAXIMALE);
+        envoyer_AT("AT*CONFIG",&compteur,SECURITE_VITESSE_LACET);
+        envoyer_AT("AT*CONFIG",&compteur,SECURITE_ANGLE_MAXIMAL);
+        
+        status = 1;
+        mode = 1;
+    }
 }
 
 void on_nfc_land(void) {
     
-    printf("ATTERISSAGE !\n\n\n\n\n\n");
+    if (status == 1) {
+        
+#ifdef DEBUG_PRINTF
+        printf("\nAtterissage !\n");
+#endif
+        
+        envoyer_AT("AT*REF",&compteur,"290717696"); // Atterissage du drone
+        status = 0;
+    }
 }
 
 #endif
@@ -133,9 +160,7 @@ int main(int argc, char *argv[]) {
     printf("\nAppuyez sur \"R1\" pour décoller !\n");
     
     int boucle = 1;
-    int status = 0; // status = 0 : Le drone est au sol - status = 0 : Le drone est en vol
     int urgence = 0; // urgence = 0 : Mode urgence désactivé - urgence = 1 : Mode urgence activé
-    int mode = 1; // mode = 0 : Nervosité - mode = 1 : Sécurité
     int flying_mode = 0; // flying_mode = 0 : Mode normal - flying_mode = 1 "hover over oriented roundel mode"
     unsigned int compteur = 0; // Initialisation du compteur
     
@@ -171,7 +196,7 @@ int main(int argc, char *argv[]) {
                 status = 0;
             }
             
-        } else if (status==0 && manette.boutons[PS3_BOUTON_R1]) {
+        } else if (status == 0 && manette.boutons[PS3_BOUTON_R1]) {
             
 #ifdef DEBUG_PRINTF
             printf("\nDécollage !\n");
@@ -188,7 +213,7 @@ int main(int argc, char *argv[]) {
             status = 1;
             mode = 1;
             
-        } else if (status== 1 && manette.boutons[PS3_BOUTON_L1]) {
+        } else if (status == 1 && manette.boutons[PS3_BOUTON_L1]) {
             
 #ifdef DEBUG_PRINTF
             printf("\nAtterissage !\n");
@@ -226,7 +251,7 @@ int main(int argc, char *argv[]) {
             mode = 0;
             manette.boutons[PS3_BOUTON_R3] = 0;
             
-        } else if (urgence==0 && manette.boutons[PS3_BOUTON_TRIANGLE] && manette.boutons[PS3_BOUTON_CROIX]) {
+        } else if (urgence== 0 && manette.boutons[PS3_BOUTON_TRIANGLE] && manette.boutons[PS3_BOUTON_CROIX]) {
             
 #ifdef DEBUG_PRINTF
             printf("ARRET_URGENCE\n");
