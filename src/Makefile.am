@@ -7,4 +7,5 @@ Gestion_Manette.h
 
 if NFC_SUPPORT
 AR_Flight_Controller_SOURCES += nfc_support.c nfc_support.h
+AR_Flight_Controller_CFLAGS = "-std=c99"
 endif
