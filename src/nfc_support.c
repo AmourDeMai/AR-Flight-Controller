@@ -19,11 +19,8 @@
  * copyright or trademark. NXP must not be liable for any loss or damage
  *                          arising from its use.
  */
-/*
- * \file basic.c
- */
 
-#include "nfc_supprot.h"
+#include "nfc_support.h"
 #include "neardal.h"
 
 typedef struct params {

@@ -1,9 +1,5 @@
 // AR Drone Flight Controller
 
-// Équipe Dédale
-// Télécom SudParis
-// Upsilonaudio.com
-
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +30,7 @@
 #endif
 
 #if defined(HAVE_NFC_ENABLE) && HAVE_NFC_ENABLE == 1
-#include "nfc_supprot.h"
+#include "nfc_support.h"
 #endif
 
 // DEFINES
@@ -503,5 +499,6 @@ int envoyer_AT(char* commande,
     }
     
     usleep(DELAI_MICROSECONDES);
+    
     return 1; // SUCCÈS
 }

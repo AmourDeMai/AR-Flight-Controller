@@ -1,9 +1,5 @@
 // AR Drone Flight Controller
 
-// Équipe Dédale
-// Télécom SudParis
-// Upsilonaudio.com
-
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +19,10 @@
 
 int initialiser_Manette(Manette *manette, int numero_Manette)
 {
-    if(numero_Manette < SDL_NumJoysticks()) // Le numéro de la manette est-il correct ?
-    {
+    // Le numéro de la manette est-il correct ?
+    
+    if(numero_Manette < SDL_NumJoysticks()) {
+        
         manette->joystick = SDL_JoystickOpen(numero_Manette);
         manette->numero = numero_Manette;
         manette->boutons = malloc(SDL_JoystickNumButtons(manette->joystick) * sizeof(char));
@@ -35,10 +33,12 @@ int initialiser_Manette(Manette *manette, int numero_Manette)
         {
             manette->boutons[i] = 0; // Initialisation des valeurs
         }
+        
         for(i=0;i<SDL_JoystickNumAxes(manette->joystick);i++) // Tant qu'on a pas atteint le nombre maximal d'axes ...
         {
             manette->axes[i] = 0; // Initialisation des valeurs
         }
+        
         for(i=0;i<SDL_JoystickNumHats(manette->joystick);i++) // Tant qu'on a pas atteint le nombre maximal de chapeaux ...
         {
             manette->chapeaux[i] = SDL_HAT_CENTERED; // Initialisation des valeurs
@@ -51,10 +51,13 @@ int initialiser_Manette(Manette *manette, int numero_Manette)
         printf("Nombre de chapeaux : %d\n\n",SDL_JoystickNumHats(manette->joystick));
         #endif
         #endif
+        
         return 1 ;
-    }
-    else // Le numéro de la manette n'est pas correct !
-    {
+        
+    } else {
+        
+        // Le numéro de la manette n'est pas correct !
+        
         #ifdef DEBUG_PRINTF
         #ifdef INFOS_MANETTE
         printf("\nERREUR : Aucune manette détectée !\n\n");
@@ -64,6 +67,7 @@ int initialiser_Manette(Manette *manette, int numero_Manette)
         manette->boutons = NULL;
         manette->axes = NULL;
         manette->chapeaux = NULL;
+        
         return 0 ;
     }   
 }
@@ -116,17 +120,14 @@ int actualiser_Etat_Manette(Manette *manette)
             }
         }
     }
+    
     return status;
 }
 
-float adaptation_axe (float my_floating_point_variable)
-{
-    if (my_floating_point_variable < 0)
-    {
+float adaptation_axe (float my_floating_point_variable) {
+    if (my_floating_point_variable < 0) {
         return -(my_floating_point_variable * my_floating_point_variable);
-    }
-    else
-    {
+    } else {
         return (my_floating_point_variable * my_floating_point_variable);
     }
 }
