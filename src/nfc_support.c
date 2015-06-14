@@ -402,7 +402,7 @@ void *nfc_thread_func(void *data) {
     cli_params *params = NULL;
     
     if (!data) {
-        params = (cli_params) data;
+        params = (cli_params*) data;
     } else {
         return NULL;
     }
