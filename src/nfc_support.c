@@ -324,6 +324,8 @@ static void tag_device_lost(const char *name, void *pUserData)
 static int nfc_main(int argc,
                     char** argv) {
     
+    printf("\nLancement du thread NFC.\n");
+    
     params_t params;
     params.debug = FALSE;
     params.adapterObjectPath = NULL;

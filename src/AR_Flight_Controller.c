@@ -127,7 +127,6 @@ int main(int argc, char *argv[]) {
     unsigned int compteur = 0; // Initialisation du compteur
     
 #if defined(HAVE_NFC_ENABLE) && HAVE_NFC_ENABLE == 1
-    printf("\nLancement du thread NFC.\n");
     cli_params params = { argc, argv };
     GThread *nfc_thread = g_thread_new("NFC Thread", &nfc_thread_func, &params);
 #endif
