@@ -19,7 +19,7 @@
 // DÉCLARATION DES STRUCTURES
 
 typedef struct cli_params {
-    int agrc;
+    int argc;
     char **argv;
     
 } cli_params;
