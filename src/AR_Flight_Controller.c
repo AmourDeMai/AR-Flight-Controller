@@ -17,7 +17,8 @@
  */
 
 // HEADERS
-#include <SDL/SDL.h>
+
+#include <SDL.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -27,6 +28,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Gestion_Manette.h"
+
+// DEFINES
 
 // ADRESSE IP AR.DRONE
 #define ADRESSEIP "192.168.1.1"
@@ -59,28 +62,33 @@
 #define SECURITE_ANGLE_MAXIMAL "\"control:euler_angle_max\",\"0.25\"" // Angle de flexion maximal (radians)
 
 // PROTOTYPES DES FONCTIONS
-int envoyer_AT(char* commande, unsigned int *compteur, char* argument);
-int envoyer_AT_PCMD(unsigned int *compteur, float my_floating_point_variable_4, float my_floating_point_variable_3, float my_floating_point_variable_1, float my_floating_point_variable_2);
+
+int envoyer_AT(char* commande,
+               unsigned int *compteur,
+               char* argument);
+
+int envoyer_AT_PCMD(unsigned int *compteur,
+                    float my_floating_point_variable_4,
+                    float my_floating_point_variable_3,
+                    float my_floating_point_variable_1,
+                    float my_floating_point_variable_2);
 
 // VARIABLES GLOBALES
+
 struct sockaddr_in serv_addr;
 int sockfd, slen;
 
-// FONCTION MAIN
-int main(int argc, char *argv[])
-{
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) // Initialisation de la SDL
-    {
-        #ifdef DEBUG_PRINTF
+// FONCTION PRINCIPALE
+
+int main(int argc, char *argv[]) {
+    
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0) {
+        
+#ifdef DEBUG_PRINTF
         fprintf(stderr, "Erreur d'initialisation de la SDL : %s\n", SDL_GetError());
-        #endif
+#endif
         exit(EXIT_FAILURE);
     }
-    
-    // Création de la fennêtre !
-    // SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE);
-    // SDL_WM_SetCaption("AR Flight Controller !", NULL);
-    // SDL_JoystickEventState(SDL_ENABLE);
     
     Manette manette; // Structure qui permet de gérer les boutons et les axes de la manette
     
@@ -88,20 +96,21 @@ int main(int argc, char *argv[])
     {
         exit(EXIT_FAILURE);
     }
+    
     slen=sizeof(serv_addr);
-    if ((sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP))==-1)
-    {
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
         perror("Socket ");
     }
+    
     bzero(&serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT_AT);
-    if (inet_aton(ADRESSEIP, &serv_addr.sin_addr)==0)
-    {
+    if (inet_aton(ADRESSEIP, &serv_addr.sin_addr) == 0) {
         fprintf(stderr, "inet_aton() : ERREUR\n");
         exit(1);
     }
     printf("\nAppuyez sur \"R1\" pour décoller !\n");
+    
     int boucle = 1;
     int status = 0; // status = 0 : Le drone est au sol - status = 0 : Le drone est en vol
     int urgence = 0; // urgence = 0 : Mode urgence désactivé - urgence = 1 : Mode urgence activé
@@ -109,41 +118,42 @@ int main(int argc, char *argv[])
     int flying_mode = 0; // flying_mode = 0 : Mode normal - flying_mode = 1 "hover over oriented roundel mode"
     unsigned int compteur = 0; // Initialisation du compteur
     
-    while (boucle)
-    {
+    while (boucle) {
+        
         if (actualiser_Etat_Manette(&manette) == 0) // Actualisaton de l'état de la manette
         {
             boucle = 0; // On sort de la boucle
-            if (status==1)
+            if (status== 1)
             {
-                #ifdef DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
                 printf("\nAtterissage !\n");
-                #endif
+#endif
                 envoyer_AT("AT*REF",&compteur,"290717696"); // Atterissage du drone
                 status = 0;
             }
         }
-        if (manette.boutons[PS3_BOUTON_START])
-        {
+        
+        if (manette.boutons[PS3_BOUTON_START]) {
+            
             boucle = 0; // On sort de la boucle
-            if (status==1)
-            {
-                #ifdef DEBUG_PRINTF
+            if (status== 1) {
+                
+#ifdef DEBUG_PRINTF
                 printf("\nAtterissage !\n");
-                #endif
+#endif
                 envoyer_AT("AT*REF",&compteur,"290717696"); // Atterissage du drone
                 status = 0;
             }
-        }
-        else if (status==0 && manette.boutons[PS3_BOUTON_R1])
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (status==0 && manette.boutons[PS3_BOUTON_R1]) {
+            
+#ifdef DEBUG_PRINTF
             printf("\nDécollage !\n");
-            #endif
+#endif
             envoyer_AT("AT*REF",&compteur,"290718208"); // Décollage du drone
-            #ifdef DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
             printf("\nMode \"SÉCURITÉ\" !\n"); // Activation du mode "sécurité"
-            #endif
+#endif
             envoyer_AT("AT*CONFIG",&compteur,SECURITE_ALTITUDE_MAXIMALE);
             envoyer_AT("AT*CONFIG",&compteur,SECURITE_ALTITUDE_MINIMALE);
             envoyer_AT("AT*CONFIG",&compteur,SECURITE_VITESSE_VERTICALE_MAXIMALE);
@@ -151,20 +161,22 @@ int main(int argc, char *argv[])
             envoyer_AT("AT*CONFIG",&compteur,SECURITE_ANGLE_MAXIMAL);
             status = 1;
             mode = 1;
-        }
-        else if (status==1 && manette.boutons[PS3_BOUTON_L1])
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (status== 1 && manette.boutons[PS3_BOUTON_L1]) {
+            
+#ifdef DEBUG_PRINTF
             printf("\nAtterissage !\n");
-            #endif
+#endif
             envoyer_AT("AT*REF",&compteur,"290717696"); // Atterissage du drone
             status = 0;
-        }
-        else if (manette.boutons[PS3_BOUTON_L3] && mode == 0) // Activation du mode "sécurité"
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (manette.boutons[PS3_BOUTON_L3] && mode == 0) {
+            
+            // Activation du mode "sécurité"
+            
+#ifdef DEBUG_PRINTF
             printf("\nMode \"SÉCURITÉ\" !\n");
-            #endif
+#endif
             envoyer_AT("AT*CONFIG",&compteur,SECURITE_ALTITUDE_MAXIMALE);
             envoyer_AT("AT*CONFIG",&compteur,SECURITE_ALTITUDE_MINIMALE);
             envoyer_AT("AT*CONFIG",&compteur,SECURITE_VITESSE_VERTICALE_MAXIMALE);
@@ -172,12 +184,14 @@ int main(int argc, char *argv[])
             envoyer_AT("AT*CONFIG",&compteur,SECURITE_ANGLE_MAXIMAL);
             mode = 1;
             manette.boutons[PS3_BOUTON_L3] = 0;
-        }
-        else if (manette.boutons[PS3_BOUTON_R3] && mode == 1) // Activation du mode "nervosité"
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (manette.boutons[PS3_BOUTON_R3] && mode == 1) {
+            
+            // Activation du mode "nervosité"
+            
+#ifdef DEBUG_PRINTF
             printf("\nMode \"NERVOSITÉ\" !\n");
-            #endif
+#endif
             envoyer_AT("AT*CONFIG",&compteur,NERVOSITE_ALTITUDE_MAXIMALE);
             envoyer_AT("AT*CONFIG",&compteur,NERVOSITE_ALTITUDE_MINIMALE);
             envoyer_AT("AT*CONFIG",&compteur,NERVOSITE_VITESSE_VERTICALE_MAXIMALE);
@@ -185,222 +199,258 @@ int main(int argc, char *argv[])
             envoyer_AT("AT*CONFIG",&compteur,NERVOSITE_ANGLE_MAXIMAL);
             mode = 0;
             manette.boutons[PS3_BOUTON_R3] = 0;
-        }
-        else if (urgence==0 && manette.boutons[PS3_BOUTON_TRIANGLE] && manette.boutons[PS3_BOUTON_CROIX])
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (urgence==0 && manette.boutons[PS3_BOUTON_TRIANGLE] && manette.boutons[PS3_BOUTON_CROIX]) {
+            
+#ifdef DEBUG_PRINTF
             printf("ARRET_URGENCE\n");
-            #endif
+#endif
             envoyer_AT("AT*REF",&compteur,"290717952");
             status = 0;
             urgence = 1;
-        }
-        else if (urgence==1 && manette.boutons[PS3_BOUTON_CARRE] && manette.boutons[PS3_BOUTON_ROND])
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (urgence== 1 && manette.boutons[PS3_BOUTON_CARRE] && manette.boutons[PS3_BOUTON_ROND]) {
+            
+#ifdef DEBUG_PRINTF
             printf("ANTI_ARRET_URGENCE\n");
-            #endif
+#endif
             envoyer_AT("AT*REF",&compteur,"290717696");
             urgence = 0;
-        }
-        else if (status==1 && manette.boutons[PS3_BOUTON_HAUT] == 1 && manette.boutons[PS3_BOUTON_PLAYSTATION] == 1)
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (status== 1 && manette.boutons[PS3_BOUTON_HAUT] == 1 && manette.boutons[PS3_BOUTON_PLAYSTATION] == 1) {
+            
+#ifdef DEBUG_PRINTF
             printf("\nLooping vers l'avant !\n");
-            #endif
+#endif
             envoyer_AT("AT*CONFIG",&compteur,ANIMATION_LOOPING_AVANT);
             manette.boutons[PS3_BOUTON_HAUT] = 0;
-        }
-        else if (status==1 && manette.boutons[PS3_BOUTON_BAS] == 1 && manette.boutons[PS3_BOUTON_PLAYSTATION] == 1)
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (status== 1 && manette.boutons[PS3_BOUTON_BAS] == 1 && manette.boutons[PS3_BOUTON_PLAYSTATION] == 1) {
+            
+#ifdef DEBUG_PRINTF
             printf("\nLooping vers l'arrière !\n");
-            #endif
+#endif
             envoyer_AT("AT*CONFIG",&compteur,ANIMATION_LOOPING_ARRIERE);
             manette.boutons[PS3_BOUTON_BAS] = 0;
-        }
-        else if (status==1 && manette.boutons[PS3_BOUTON_GAUCHE] == 1 && manette.boutons[PS3_BOUTON_PLAYSTATION] == 1)
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (status== 1 && manette.boutons[PS3_BOUTON_GAUCHE] == 1 && manette.boutons[PS3_BOUTON_PLAYSTATION] == 1) {
+            
+#ifdef DEBUG_PRINTF
             printf("\nLooping vers la gauche !\n");
-            #endif
+#endif
             envoyer_AT("AT*CONFIG",&compteur,ANIMATION_LOOPING_GAUCHE);
             manette.boutons[PS3_BOUTON_GAUCHE] = 0;
-        }
-        else if (status==1 && manette.boutons[PS3_BOUTON_DROITE] == 1 && manette.boutons[PS3_BOUTON_PLAYSTATION] == 1)
-        {
-            #ifdef DEBUG_PRINTF
+            
+        } else if (status== 1 && manette.boutons[PS3_BOUTON_DROITE] == 1 && manette.boutons[PS3_BOUTON_PLAYSTATION] == 1) {
+            
+#ifdef DEBUG_PRINTF
             printf("\nLooping vers la droite !\n");
-            #endif
+#endif
             envoyer_AT("AT*CONFIG",&compteur,ANIMATION_LOOPING_DROITE);
             manette.boutons[PS3_BOUTON_DROITE] = 0;
-        }
-        else if (manette.boutons[PS3_BOUTON_SELECT])
-        {
-            if ( flying_mode == 1) // Activation du mode de vol "normal"
-            {
-                #ifdef DEBUG_PRINTF
+            
+        } else if (manette.boutons[PS3_BOUTON_SELECT]) {
+            
+            if ( flying_mode == 1) {
+                
+                // Activation du mode de vol "normal"
+                
+#ifdef DEBUG_PRINTF
                 printf("\nMode de vol : NORMAL\n");
-                #endif
+#endif
                 envoyer_AT("AT*CONFIG",&compteur,MODE_DE_VOL_NORMAL);
                 manette.boutons[PS3_BOUTON_SELECT] = 0;
                 flying_mode = 0;
-            }
-            else // Activation du mode de vol autonome
-            {
-                #ifdef DEBUG_PRINTF
+                
+            } else {
+                
+                // Activation du mode de vol autonome
+                
+#ifdef DEBUG_PRINTF
                 printf("\nMode de vol : AUTONOME\n");
-                #endif
+#endif
                 envoyer_AT("AT*CONFIG",&compteur,MODE_DE_VOL_AUTONOME);
                 envoyer_AT("AT*CONFIG",&compteur,TYPE_DE_CIBLE);
                 manette.boutons[PS3_BOUTON_SELECT] = 0;
                 flying_mode = 1;
+                
             }
+            
             manette.boutons[PS3_BOUTON_SELECT] = 0;
-        }
-        else if (status==1)
-        {
-            if (envoyer_AT_PCMD(&compteur,manette.axes[PS3_AXE_GAUCHE_HORIZONTAL],manette.axes[PS3_AXE_GAUCHE_VERTICAL],manette.axes[PS3_AXE_DROITE_HORIZONTAL],manette.axes[PS3_AXE_DROITE_VERTICAL]) == 0 )
-            {
+            
+        } else if (status== 1) {
+            
+            if (envoyer_AT_PCMD(&compteur,manette.axes[PS3_AXE_GAUCHE_HORIZONTAL],manette.axes[PS3_AXE_GAUCHE_VERTICAL],manette.axes[PS3_AXE_DROITE_HORIZONTAL],manette.axes[PS3_AXE_DROITE_VERTICAL]) == 0 ) {
                 boucle = 0;
             }
         }
     }
-    // Libération de la mémoire allouée à la manette et au socket
+    
+    // Libération de la mémoire allouée à la manette et au socket.
     close(sockfd);
     detruire_Manette(&manette);
     SDL_Quit();
+    
     return EXIT_SUCCESS;
 }
 
 // DÉFINITION DES FONCTIONS
 
-int envoyer_AT_PCMD(unsigned int *compteur, float my_floating_point_variable_4, float my_floating_point_variable_3, float my_floating_point_variable_1, float my_floating_point_variable_2)
+int envoyer_AT_PCMD(unsigned int *compteur,
+                    float my_floating_point_variable_4,
+                    float my_floating_point_variable_3,
+                    float my_floating_point_variable_1,
+                    float my_floating_point_variable_2)
 {
     char message[TAILLE_MESSAGE]; // Commande AT à envoyer
     *compteur=*compteur+1; // Incrémentation du compteur
-    #ifdef DEBUG_PRINTF
-    #ifdef INFOS_AXES
+    
+#ifdef DEBUG_PRINTF
+#ifdef INFOS_AXES
     printf("INT - GAUCHE - AXE HORIZONTAL : %f\n",my_floating_point_variable_4);
     printf("INT - GAUCHE - AXE VERTICAL : %f\n",my_floating_point_variable_3);
     printf("INT - DROITE - AXE HORIZONTAL : %f\n",my_floating_point_variable_1);
     printf("INT - DROITE - AXE VERTICAL : %f\n",my_floating_point_variable_2);
-    #endif
-    #endif
-    if ((my_floating_point_variable_4 == -32768.000000) && (my_floating_point_variable_3 == -32768.000000) && (my_floating_point_variable_2 == -32768.000000) && (my_floating_point_variable_1 == -32768.000000))
-    {
-        #ifdef DEBUG_PRINTF
+#endif
+#endif
+    
+    if ((my_floating_point_variable_4 == -32768.000000) &&
+        (my_floating_point_variable_3 == -32768.000000) &&
+        (my_floating_point_variable_2 == -32768.000000) &&
+        (my_floating_point_variable_1 == -32768.000000)) {
+        
+#ifdef DEBUG_PRINTF
         printf("Atterissage d'urgence !\n");
-        #endif
+#endif
         sprintf(message,"AT*REF=%d,290717696\r",*compteur); // Atterissage d'urgence car la manette est déconnectée
-        #ifdef DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
         printf("%s\n",message);
-        #endif
-        if (sendto(sockfd, message, BUFLEN, 0, (struct sockaddr*)&serv_addr, slen)==-1)
-        {
+#endif
+        
+        if (sendto(sockfd, message, BUFLEN, 0, (struct sockaddr*)&serv_addr, slen) == -1) {
             perror("sendto() ");
         }
+        
         return 0; // On sort de la fonction
-    }
-    else if( (abs(my_floating_point_variable_4) < PS3_AXES_SEUIL_DETECTION) && (abs (my_floating_point_variable_3) < PS3_AXES_SEUIL_DETECTION) && (abs (my_floating_point_variable_2) < PS3_AXES_SEUIL_DETECTION) && (abs (my_floating_point_variable_1) < PS3_AXES_SEUIL_DETECTION))
-    {
-        #ifdef DEBUG_PRINTF
+        
+    } else if( (abs(my_floating_point_variable_4) < PS3_AXES_SEUIL_DETECTION) &&
+              (abs(my_floating_point_variable_3) < PS3_AXES_SEUIL_DETECTION) &&
+              (abs(my_floating_point_variable_2) < PS3_AXES_SEUIL_DETECTION) &&
+              (abs(my_floating_point_variable_1) < PS3_AXES_SEUIL_DETECTION)) {
+        
+#ifdef DEBUG_PRINTF
         printf("Vol stationnaire !\n");
-        #endif
+#endif
         sprintf(message,"AT*PCMD=%d,0,0,0,0,0\r",*compteur); // Vol stationnaire
-    }
-    else
-    {
-        if(my_floating_point_variable_1>PS3_AXES_SEUIL_DETECTION)
-        {
+        
+    } else {
+        
+        if(my_floating_point_variable_1>PS3_AXES_SEUIL_DETECTION) {
+            
             my_floating_point_variable_1=my_floating_point_variable_1/32767.;
             my_floating_point_variable_1=adaptation_axe(my_floating_point_variable_1); // Correction
-        }
-        else if (my_floating_point_variable_1<-PS3_AXES_SEUIL_DETECTION)
-        {
+            
+        } else if (my_floating_point_variable_1<-PS3_AXES_SEUIL_DETECTION) {
+            
             my_floating_point_variable_1=my_floating_point_variable_1/32768.;
             my_floating_point_variable_1=adaptation_axe(my_floating_point_variable_1); // Correction
-        }
-        else
-        {
+            
+        } else {
+            
             my_floating_point_variable_1 = 0;
         }
-        if(my_floating_point_variable_2>PS3_AXES_SEUIL_DETECTION)
-        {
+        
+        if(my_floating_point_variable_2>PS3_AXES_SEUIL_DETECTION) {
+            
             my_floating_point_variable_2=my_floating_point_variable_2/32767.;
             my_floating_point_variable_2=adaptation_axe(my_floating_point_variable_2); // Correction
-        }
-        else if (my_floating_point_variable_2<-PS3_AXES_SEUIL_DETECTION)
-        {
+            
+        } else if (my_floating_point_variable_2<-PS3_AXES_SEUIL_DETECTION) {
+            
             my_floating_point_variable_2=my_floating_point_variable_2/32768.;
             my_floating_point_variable_2=adaptation_axe(my_floating_point_variable_2); // Correction
-        }
-        else
-        {
+            
+        } else {
+            
             my_floating_point_variable_2 = 0;
         }
-        if(my_floating_point_variable_3>PS3_AXES_SEUIL_DETECTION)
-        {
+        
+        if(my_floating_point_variable_3>PS3_AXES_SEUIL_DETECTION) {
+            
             my_floating_point_variable_3=-my_floating_point_variable_3/32767.;
             my_floating_point_variable_3=adaptation_axe(my_floating_point_variable_3); // Correction
-        }
-        else if (my_floating_point_variable_3<-PS3_AXES_SEUIL_DETECTION)
-        {
+            
+        } else if (my_floating_point_variable_3<-PS3_AXES_SEUIL_DETECTION) {
+            
             my_floating_point_variable_3=-my_floating_point_variable_3/32768.;
             my_floating_point_variable_3=adaptation_axe(my_floating_point_variable_3); // Correction
-        }
-        else
-        {
+            
+        } else {
             my_floating_point_variable_3 = 0;
         }
-        if(my_floating_point_variable_4>PS3_AXES_SEUIL_DETECTION)
-        {
+        
+        if(my_floating_point_variable_4>PS3_AXES_SEUIL_DETECTION) {
+            
             my_floating_point_variable_4=my_floating_point_variable_4/32767.;
             my_floating_point_variable_4=adaptation_axe(my_floating_point_variable_4); // Correction
-        }
-        else if (my_floating_point_variable_4<-PS3_AXES_SEUIL_DETECTION)
-        {
+            
+        } else if (my_floating_point_variable_4<-PS3_AXES_SEUIL_DETECTION) {
+            
             my_floating_point_variable_4=my_floating_point_variable_4/32768.;
             my_floating_point_variable_4=adaptation_axe(my_floating_point_variable_4); // Correction
-        }
-        else
-        {
+            
+        } else {
+            
             my_floating_point_variable_4 = 0;
         }
-        #ifdef DEBUG_PRINTF
-        #ifdef INFOS_AXES
-        printf("FLOAT - GAUCHE - AXE HORIZONTAL : %f\n",my_floating_point_variable_4);
-        printf("FLOAT - GAUCHE - AXE VERTICAL : %f\n",my_floating_point_variable_3);
-        printf("FLOAT - DROITE - AXE HORIZONTAL : %f\n",my_floating_point_variable_1);
-        printf("FLOAT - DROITE - AXE VERTICAL : %f\n",my_floating_point_variable_2);
-        #endif
-        #endif
-        sprintf(message,"AT*PCMD=%d,1,%d,%d,%d,%d\r",*compteur,*(int*)(&my_floating_point_variable_1),*(int*)(&my_floating_point_variable_2),*(int*)(&my_floating_point_variable_3),*(int*)(&my_floating_point_variable_4));
+        
+#ifdef DEBUG_PRINTF
+#ifdef INFOS_AXES
+        printf("FLOAT - GAUCHE - AXE HORIZONTAL : %f\n", my_floating_point_variable_4);
+        printf("FLOAT - GAUCHE - AXE VERTICAL : %f\n", my_floating_point_variable_3);
+        printf("FLOAT - DROITE - AXE HORIZONTAL : %f\n", my_floating_point_variable_1);
+        printf("FLOAT - DROITE - AXE VERTICAL : %f\n", my_floating_point_variable_2);
+#endif
+#endif
+        sprintf(message,"AT*PCMD=%d,1,%d,%d,%d,%d\r",
+                *compteur,
+                *(int*)(&my_floating_point_variable_1),
+                *(int*)(&my_floating_point_variable_2),
+                *(int*)(&my_floating_point_variable_3),
+                *(int*)(&my_floating_point_variable_4));
     }
-    #ifdef DEBUG_PRINTF
+    
+#ifdef DEBUG_PRINTF
     printf("%s\n",message);
-    #endif
-    if (sendto(sockfd, message, BUFLEN, 0, (struct sockaddr*)&serv_addr, slen)==-1)
-    {
+#endif
+    
+    if (sendto(sockfd, message, BUFLEN, 0, (struct sockaddr*)&serv_addr, slen) == -1) {
         perror("sendto() ");
     }
     usleep(DELAI_MICROSECONDES);
+    
     return 1;
 }
 
-int envoyer_AT(char* commande, unsigned int *compteur, char* argument)
+int envoyer_AT(char* commande,
+               unsigned int *compteur,
+               char *argument)
 {
     char message[TAILLE_MESSAGE]; // Commande AT à envoyer
     *compteur=*compteur+1; // Incrémentation du compteur
     sprintf(message,"%s=%d,%s\r",commande,*compteur,argument);
-    #ifdef DEBUG_PRINTF
+    
+#ifdef DEBUG_PRINTF
     printf("%s\n",message);
-    #endif
-    if (sendto(sockfd, message, BUFLEN, 0, (struct sockaddr*)&serv_addr, slen)==-1)
-    {
+#endif
+    
+    if (sendto(sockfd, message, BUFLEN, 0, (struct sockaddr*)&serv_addr, slen)== -1) {
+        
         perror("sendto() ");
+        
         return 0; // ÉCHEC
     }
+    
     usleep(DELAI_MICROSECONDES);
     return 1; // SUCCÈS
 }

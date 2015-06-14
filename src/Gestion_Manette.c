@@ -18,7 +18,7 @@
 
 // HEADERS
 #include <stdlib.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "Gestion_Manette.h"
 
 int initialiser_Manette(Manette *manette, int numero_Manette)

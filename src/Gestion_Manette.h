@@ -1,9 +1,5 @@
 // AR Drone Flight Controller
 
-// Équipe Dédale
-// Télécom SudParis
-// Upsilonaudio.com
-
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +16,8 @@
 #define Flight_Controller_Gestion_Manette_h
 
 // HEADERS
-#include <SDL/SDL.h>
+
+#include <SDL.h>
 
 // MANNETTE PLAYSTATION 3
 #define PS3_AXE_GAUCHE_HORIZONTAL 0
@@ -74,18 +71,19 @@
 #define INFOS_MANETTE // Afficher des informations sur la manette en début de programme
 
 typedef struct Manette Manette;
-struct Manette
-{
-  SDL_Joystick *joystick; // La manette
-  char *boutons; // Les boutons de la manette
-  int *axes; // les axes de la manette
-  int *chapeaux; // Les chapeaux de la manette
-  int numero; // Numéro de la manette
+struct Manette {
+    
+    SDL_Joystick *joystick; // La manette
+    char *boutons; // Les boutons de la manette
+    int *axes; // les axes de la manette
+    int *chapeaux; // Les chapeaux de la manette
+    int numero; // Numéro de la manette
+    
 };
 
 int initialiser_Manette(Manette *manette,int numero_Manette); // Initailisaton de la manette
 void detruire_Manette(Manette *manette); // Libération de la mémoire allouée
 int actualiser_Etat_Manette(Manette *manette); // Actualisation de l'état de la manette
-float adaptation_axe (float my_floating_point_variable);
+float adaptation_axe(float my_floating_point_variable);
 
 #endif
