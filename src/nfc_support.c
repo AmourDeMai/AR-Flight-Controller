@@ -399,8 +399,10 @@ static int nfc_main(int argc,
 
 void *nfc_thread_func(void *data) {
     
+    cli_params *params = NULL;
+    
     if (!data) {
-     cli_params *params = (cli_params) data;
+        params = (cli_params) data;
     } else {
         return NULL;
     }
