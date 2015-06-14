@@ -238,7 +238,7 @@ static void handle_tag(neardal_tag* pTag)
         
         if (uid_land != NULL && g_strcmp0(str, uid_land) == 0) {
             on_nfc_land();
-        } esle if (uid_take_off != NULL && g_strcmp0(str, uid_take_off) == 0) {
+        } else if (uid_take_off != NULL && g_strcmp0(str, uid_take_off) == 0) {
             on_nfc_take_off();
         }
         
