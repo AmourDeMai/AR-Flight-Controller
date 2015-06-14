@@ -9,6 +9,13 @@
 #ifndef UpsilonAudio_nfc_supprot_h
 #define UpsilonAudio_nfc_supprot_h
 
+// HEADERS
+
+#include <glib.h>
+#include <glib-object.h>
+#include <glib/gprintf.h>
+#include <string.h>
+
 // DÉCLARATION DES STRUCTURES
 
 typedef struct cli_params {

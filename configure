@@ -626,6 +626,8 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 SYSCONFIG
 SYSROOT_FLAGS
+NFC_SUPPORT_FALSE
+NFC_SUPPORT_TRUE
 NEARDAL_LIBS
 NEARDAL_CFLAGS
 GIO_LIBS
@@ -4971,6 +4973,14 @@ else
   echo "Disable NFC Support"
 fi
 
+ if test "x$enable_nfc" = "xyes"; then
+  NFC_SUPPORT_TRUE=
+  NFC_SUPPORT_FALSE='#'
+else
+  NFC_SUPPORT_TRUE='#'
+  NFC_SUPPORT_FALSE=
+fi
+
 
 
 # Check whether --with-sysroot was given.
@@ -5130,6 +5140,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${NFC_SUPPORT_TRUE}" && test -z "${NFC_SUPPORT_FALSE}"; then
+  as_fn_error $? "conditional \"NFC_SUPPORT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

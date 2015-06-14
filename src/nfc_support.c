@@ -23,11 +23,6 @@
  * \file basic.c
  */
 
-#include <glib.h>
-#include <glib-object.h>
-#include <glib/gprintf.h>
-#include <string.h>
-
 #include "nfc_supprot.h"
 #include "neardal.h"
 

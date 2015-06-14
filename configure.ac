@@ -38,6 +38,7 @@ AC_DEFINE([HAVE_NFC_ENABLE],[1],[Should we enable NFC support.])
 ]
 ,
 [echo "Disable NFC Support"])
+AM_CONDITIONAL(NFC_SUPPORT, test "x$enable_nfc" = "xyes")
 
 AC_ARG_WITH([sysroot], 
   [AS_HELP_STRING([--with-sysroot=SYSROOT],
