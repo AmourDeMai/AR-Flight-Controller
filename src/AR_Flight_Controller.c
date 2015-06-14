@@ -87,6 +87,7 @@ struct sockaddr_in serv_addr;
 int sockfd, slen;
 int status = 0; // status = 0 : Le drone est au sol - status = 1 : Le drone est en vol
 int mode = 1; // mode = 0 : Nervosité - mode = 1 : Sécurité
+unsigned int compteur = 0; // Initialisation du compteur
 
 // FONCTION PRINCIPALE
 
@@ -162,7 +163,6 @@ int main(int argc, char *argv[]) {
     int boucle = 1;
     int urgence = 0; // urgence = 0 : Mode urgence désactivé - urgence = 1 : Mode urgence activé
     int flying_mode = 0; // flying_mode = 0 : Mode normal - flying_mode = 1 "hover over oriented roundel mode"
-    unsigned int compteur = 0; // Initialisation du compteur
     
 #if defined(HAVE_NFC_ENABLE) && HAVE_NFC_ENABLE == 1
     cli_params params = { argc, argv };
